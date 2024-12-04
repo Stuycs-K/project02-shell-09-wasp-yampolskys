@@ -26,18 +26,12 @@ int main(){
     }
 
     while(fgets(line, 256, stdin) != NULL){
-      if(getcwd(path, sizeof(path)) != NULL){
-        printf("%s: $ ", path);
-      }
-      else{
-        perror("error with getting path\n");
-        exit(1);
-      }
+      printf("%s: $ ", path);
     }
-
+    
     return 0;
-
   }
+
 
 
   /*while(fgets(line, 256, stdin) != NULL){
