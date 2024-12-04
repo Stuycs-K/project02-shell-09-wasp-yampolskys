@@ -30,6 +30,9 @@ int main(){
   char line[256];
   while(fgets(line, 256, stdin) != NULL){
     printf("%s\n", line);
+    if(strcmp(line, "exit") == 0){
+      kill(getpid(), SIGINT);
+    }
     parse_args(line, args);
 
     //pid_t child = fork(); holy crap this is the worst thing I have ever done
