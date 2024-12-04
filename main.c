@@ -13,22 +13,34 @@ int main(){
 
   while(1){
     char* args[256];
+    char line[256];
     
+    // checks the path again and again! Super duper cool
+    char path[256];
+    if(getcwd(path, sizeof(path)) != NULL){
+      printf("%s: $ ", path);
+    }
+    else{
+      perror("error with getting path\n");
+      exit(1);
+    }
+
+    while(fgets(line, 256, stdin) != NULL){
+      if(getcwd(path, sizeof(path)) != NULL){
+        printf("%s: $ ", path);
+      }
+      else{
+        perror("error with getting path\n");
+        exit(1);
+      }
+    }
+
+    return 0;
 
   }
-// should be a while(1) loop
-  char path[256];
-  if(getcwd(path, sizeof(path)) != NULL){
-    printf("%s: $ ", path);
-  }
-  else{
-    perror("error with getting path");
-    exit(1);
-  }
 
-  char* args[256];
-  char line[256];
-  while(fgets(line, 256, stdin) != NULL){
+
+  /*while(fgets(line, 256, stdin) != NULL){
     printf("%s\n", line);
     parse_args(line, args);
 
@@ -37,5 +49,6 @@ int main(){
     execvp(args[0], args);
     printf("%s\n", line);
   }
+  */
   return 0;
 }
