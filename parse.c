@@ -1,4 +1,5 @@
 #include <strings.h>
+#include "parse.h"
 
 void parse_args( char * line, char ** arg_ary ){
   char* token; int i = 0;
