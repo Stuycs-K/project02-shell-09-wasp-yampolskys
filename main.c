@@ -27,8 +27,18 @@ int main(){
 
     while(fgets(line, 256, stdin) != NULL){
       printf("%s: $ ", path);
+      printf("%s\n", line);
+      parse_args(line, args);
+      execvp(args[0], args);
+
+      pid_t child = fork();
+      if(child == 0){
+        execvp(args[0], args);
+      }
     }
     
+    
+
     return 0;
   }
 
