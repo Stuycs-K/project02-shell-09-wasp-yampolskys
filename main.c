@@ -25,18 +25,24 @@ int main(){
       exit(1);
     }
 
-    while(fgets(line, 256, stdin) != NULL){
-      printf("%s: $ ", path);
-      printf("%s\n", line);
-      parse_args(line, args);
-      execvp(args[0], args);
+    //execl("/bin/ls", "ls", "-l", (char *)0);
 
+    while(fgets(line, 256, stdin)){
+      printf("%s: $ ", path);
+      parse_args(line, args);
       pid_t child = fork();
       if(child == 0){
         execvp(args[0], args);
+        exit(0);
       }
     }
     
+    printf("%s\n", line);
+    parse_args(line, args);
+    pid_t child = fork();
+    if(child == 0){
+      execvp(args[0], args);
+    }
     
 
     return 0;
