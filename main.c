@@ -31,7 +31,7 @@ int main(){
   while(fgets(line, 256, stdin) != NULL){
     printf("%s\n", line);
     if(strcmp(line, "exit") == 0){
-      kill(getpid(), SIGINT);
+      exit(0);
     }
     parse_args(line, args);
 
