@@ -10,10 +10,9 @@
 #include "parse.h"
 
 int main(){
-
+  char* args[256];
+  char line[256];
   while(1){
-    char* args[256];
-    char line[256];
     
     // checks the path again and again! Super duper cool
     char path[256];
@@ -25,30 +24,36 @@ int main(){
       exit(1);
     }
 
-    //execl("/bin/ls", "ls", "-l", (char *)0);
-
     while(fgets(line, 256, stdin)){
-      printf("%s: $ ", path);
+      if(feof(stdin)) {
+        printf("\n");
+        exit(0);
+      }
+      if(strncmp(line,"exit", 4) == 0){
+        exit(0);
+      }
+
+      // extra newline
+      if (line[strlen(line) - 1] == '\n') {
+        line[strlen(line) - 1] = '\0';
+      }
+
       parse_args(line, args);
       pid_t child = fork();
       if(child == 0){
-        execvp(args[0], args);
-        exit(0);
+        if(execvp(args[0], args) == -1){
+          perror("something happened :(");
+          exit(1);
+        }
+      } else {
+        int status;
+        waitpid(child, &status, 0);
       }
+      printf("%s: $ ", path);
     }
     
-    printf("%s\n", line);
-    parse_args(line, args);
-    pid_t child = fork();
-    if(child == 0){
-      execvp(args[0], args);
-    }
-    
-
     return 0;
   }
-
-
 
   /*while(fgets(line, 256, stdin) != NULL){
     printf("%s\n", line);
