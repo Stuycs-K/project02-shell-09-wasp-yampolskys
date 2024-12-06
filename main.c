@@ -8,12 +8,13 @@
 #include <dirent.h>
 #include <string.h>
 #include "parse.h"
+#include "cd.h"
 
 int main(){
   char* args[256];
   char line[256];
   while(1){
-    
+
     // checks the path again and again! Super duper cool
     char path[256];
     if(getcwd(path, sizeof(path)) != NULL){
@@ -31,7 +32,12 @@ int main(){
       }
       if(strncmp(line,"exit", 4) == 0){
         exit(0);
-      printf("%s: $ ", path);
+      }
+      if(strncmp(line,"cd",2) == 0){
+        parse_args(line, args);
+        printf("%s\n", args[1]);
+        cd(args[1]);
+        strcpy(path, args[1]);
       }
 
       // extra newline
@@ -59,10 +65,11 @@ int main(){
         }
       }
 
-      printf("\e[1;38;2;0;200;0m%s:\e[0m: $ ", path);
+      printf("\e[1;38;2;0;200;0m%s:\e[0m $ ", path);
     }
   }
-    
+
     return 0;
 }
 
+// some bugs: "echo" does not get rid of quotation marks
