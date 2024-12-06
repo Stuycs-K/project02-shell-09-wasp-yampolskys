@@ -3,11 +3,10 @@
 #include <stdlib.h>
 #include "cd.h"
 
-char* cd(char* path){
-  char cwd[256];
+int cd(char* path){
+  printf("%s\n", path);
   if(chdir(path) == 0){
-    getcwd(cwd, sizeof(cwd));
-    return cwd;
+    return 0;
   }
-  return NULL;
+  return 1;
 }

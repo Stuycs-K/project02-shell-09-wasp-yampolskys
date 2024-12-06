@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <string.h>
 #include "parse.h"
+#include "cd.h"
 
 int main(){
   char* args[256];
@@ -31,7 +32,11 @@ int main(){
       }
       if(strncmp(line,"exit", 4) == 0){
         exit(0);
-      printf("%s: $ ", path);
+      }
+      if(strncmp(line,"cd",2) == 0){
+        parse_args(line, args);
+        printf("%s\n", args[1]);
+        cd(args[1]);
       }
 
       // extra newline
@@ -66,3 +71,4 @@ int main(){
     return 0;
 }
 
+// some bugs: "echo" does not get rid of quotation marks
