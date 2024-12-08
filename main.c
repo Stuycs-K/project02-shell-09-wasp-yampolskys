@@ -15,7 +15,7 @@ int main(){
   char* args[256];
   char line[256];
   while(1){
-    
+
     // checks the path again and again! Super duper cool
     //
     if(feof(stdin)){
@@ -116,10 +116,10 @@ int main(){
         }
       }
 
-      printf("\e[1;38;2;0;200;0m%s:\e[0m: $ ", path);
+      printf("\e[1;38;2;0;200;0m%s:\e[0m $ ", path);
     }
   }
-    
+
     return 0;
 }
 
