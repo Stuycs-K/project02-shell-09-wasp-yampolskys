@@ -8,13 +8,6 @@
 #include <dirent.h>
 #include <string.h>
 #include "shellFunc.h"
-//#include "cd.h"
-//
-
-void displayPath();
-char* readstdin();
-void cd(char* path);
-void execComm(char* cmd);
 
 int main(){
   char* line;
