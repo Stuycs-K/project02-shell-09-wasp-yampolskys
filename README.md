@@ -4,3 +4,10 @@
 **Group members:** Patrick Was, Stella Yampolsky
 
 **Team name:** InterSTELLAr WASPs
+
+**Reportable bugs:**
++ When using **echo** with quotation marks, the quotation marks are kept in the output. So, 
+> echo abc
+will produce abc, and 
+> echo "abc"
+will produce "abc"
