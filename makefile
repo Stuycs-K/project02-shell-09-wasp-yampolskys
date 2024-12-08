@@ -1,6 +1,6 @@
 .PHONY: compile clean
 compile: main.o parse.o cd.o
-	gcc -o shell main.o parse.o cd.o -Wall
+	gcc -o shell main.o parse.o -Wall
 parse.o: parse.c parse.h
 	gcc -c parse.c -Wall
 cd.o: cd.c cd.h

@@ -8,7 +8,10 @@
 #include <dirent.h>
 #include <string.h>
 #include "parse.h"
-#include "cd.h"
+//#include "cd.h"
+//
+
+void cd(char* path);
 
 int main(){
   char* args[256];
@@ -36,8 +39,16 @@ int main(){
       }
       if(strncmp(line,"cd",2) == 0){
         parse_args(line, args);
-        printf("%s\n", args[1]);
-        cd(args[1]);
+        if(args[1] != NULL){
+          cd(args[1]);
+        }
+        else{
+          chdir(getenv("HOME"));
+        }
+        if(getcwd(path,sizeof(path)) != NULL){
+          printf("\e[1;38;2;0;200;0m%s:\e[0m $ ", path);
+        }
+        continue;
       }
 
       // extra newline
@@ -70,6 +81,12 @@ int main(){
   }
     
     return 0;
+}
+
+void cd(char* path){
+  if(chdir(path) != 0){
+    perror("cd not working");
+  }
 }
 
 // some bugs: "echo" does not get rid of quotation marks
