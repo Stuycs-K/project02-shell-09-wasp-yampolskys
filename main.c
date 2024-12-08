@@ -16,6 +16,11 @@ int main(){
   while(1){
     
     // checks the path again and again! Super duper cool
+    //
+    if(feof(stdin)){
+      return 0;
+    }
+
     char path[256];
     if(getcwd(path, sizeof(path)) != NULL){
       printf("\e[1;38;2;0;200;0m%s:\e[0m $ ", path);
@@ -26,10 +31,6 @@ int main(){
     }
 
     while(fgets(line, 256, stdin)){
-      if(feof(stdin)) {
-        printf("\n");
-        exit(0);
-      }
       if(strncmp(line,"exit", 4) == 0){
         exit(0);
       }
