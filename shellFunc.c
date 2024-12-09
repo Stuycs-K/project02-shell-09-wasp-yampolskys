@@ -9,12 +9,15 @@
 #include <string.h>
 #include "shellFunc.h"
 
+
+// cd's to the path indicated by the parameter; works based on curr directory, not absolute path
 void cd(char* path){
   if(chdir(path) != 0){
     perror("cd not working");
   }
 }
 
+// reads standard input, up to 256 characters. Frees and returns null if end-of-file character is present
 char* readstdin(){
   char* line = malloc(256);
   
@@ -26,6 +29,7 @@ char* readstdin(){
   return line;
 }
 
+// displays the current directory path. Calls getenv("HOME") to shorten the home path to a tilde. 
 void displayPath(){
   char cwd[1024];
   char* shorten = getenv("HOME");
@@ -40,6 +44,7 @@ void displayPath(){
   }
 }
 
+// parses arguments. Takes in a line and argument array, fills up the argument array by strsep'ing through spaces
 void parse_args( char * line, char ** arg_ary ){
   char* token; int i = 0;
   while((token = strsep(&line, " ")) != NULL){
@@ -52,7 +57,7 @@ void parse_args( char * line, char ** arg_ary ){
   return;
 }
 
-
+// redirects file input/output
 void redirect(int fd1, int fd2) {
     int backup = dup(fd2);
     dup2(fd1, fd2);
@@ -60,6 +65,7 @@ void redirect(int fd1, int fd2) {
     close(backup);
 }
 
+// 
 void execPipes(char* cmd){
   char* args[256];
   char* pipeCmd[256];
@@ -127,6 +133,7 @@ void execPipes(char* cmd){
   remove("temp.txt");
 }
 
+// executes arguments one by one. Takes in a string of all the arguments (separated by ;), and first checks for pipes. Regardless of whether pipes are found, checks for > and < operators. Then, executes commands normally if none are found. 
 void execComm(char* cmd){
   char* args[256];
   char cmdCop[256];
