@@ -43,12 +43,10 @@ void displayPath(){
 void parse_args( char * line, char ** arg_ary ){
   char* token; int i = 0;
   while((token = strsep(&line, " ")) != NULL){
-    if(token[0] == '"' && token[strlen(token - 1) == '"']){
-      token[strlen(token) - 1] = '\0';
-      token++;
+    if(strlen(token) > 0){
+      arg_ary[i] = token;
+      i++;
     }
-    arg_ary[i] = token;
-    i++;
   }
   arg_ary[i] = NULL;
   return;
