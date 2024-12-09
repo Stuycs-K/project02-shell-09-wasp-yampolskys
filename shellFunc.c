@@ -43,8 +43,10 @@ void displayPath(){
 void parse_args( char * line, char ** arg_ary ){
   char* token; int i = 0;
   while((token = strsep(&line, " ")) != NULL){
-    arg_ary[i] = token;
-    i++;
+    if(strlen(token) > 0){
+      arg_ary[i] = token;
+      i++;
+    }
   }
   arg_ary[i] = NULL;
   return;
@@ -61,53 +63,69 @@ void redirect(int fd1, int fd2) {
 void execPipes(char* cmd){
   char* args[256];
   char* pipeCmd[256];
-  int pipeFiles[2];
+  int temp;
 
   char* pipe_pos = strstr(cmd, "|");
+  if(pipe_pos == NULL){
+    perror("no pipe :/");
+    return;
+  }
   *pipe_pos = '\0';
   char* cmd1 = cmd;
-  char* cmd2 = pipe_pos + 2;
-  /*char* cmd1Cop[256]; char* cmd2Cop[256];
-  strcpy(cmd1Cop, cmd1); strcpy(cmd2Cop, cmd2);
-  char* cmd1Copy = cmd1Cop; char* cmd2Copy = cmd2Cop;*/
+  char* cmd2 = pipe_pos + 1;
 
-  printf("cmd1: %s\n", cmd1);
-  printf("cmd2: %s\n", cmd2);
-
-  /*parse_args(cmd1, args);
-  parse_args(cmd2, pipeCmd);*/
-
-  /*printf("cmd1: %s\n", cmd1Copy);
-  printf("cmd2: %s\n", cmd2Copy);*/
-
-  if(pipe(pipeFiles) == -1){
-    perror("pipe error! perror :(");
-    exit(1);
+  while(*cmd2 == ' '){
+    cmd2++;
   }
 
-  printf("cmd1: %s\n", cmd1);
-  printf("cmd2: %s\n", cmd2);
+  parse_args(cmd1, args);
+  parse_args(cmd2, pipeCmd);
+
+  temp = open("temp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  if(temp == -1){
+    perror("temp failed");
+    exit(1);
+  }
+  
 
   pid_t pid1 = fork();
   if(pid1 == 0){
-    close(pipeFiles[0]);
-    dup2(pipeFiles[1], STDOUT_FILENO);
-    execComm(cmd1);
-    perror("execvp not workingggggggg\n");
+    if(dup2(temp, STDOUT_FILENO) == -1) {
+      perror("dup2 failed for STDOUT");
+      exit(1);
+    }
+    close(temp);
+    printf("Redirected to temp file\n");
+    if(execvp(args[0], args) ==  -1){
+      perror("what");
+      exit(1);
+    }
+  }
+
+  waitpid(pid1, NULL, 0);
+  
+  temp = open("temp.txt", O_RDONLY);
+  if(temp == -1){
+    perror("temp read failed");
     exit(1);
   }
 
   pid_t pid2 = fork();
   if(pid2 == 0){
-    close(pipeFiles[1]);
-    dup2(pipeFiles[0], STDIN_FILENO);
-    execComm(cmd2);
-    perror("execvp not workinggggg\n");
-    exit(1);
+    if(dup2(temp, STDIN_FILENO) == -1) {
+      perror("dup2 failed for STDIN");
+      exit(1);
+    }
+    close(temp);
+    printf("cmd2 redirected from temp");
+    if(execvp(pipeCmd[0], pipeCmd) == -1){
+      perror("execvp cmd2 failed");
+      exit(1);
+    }
   }
-
-  close(pipeFiles[1]); close(pipeFiles[0]);
-  waitpid(pid1, NULL, 0); waitpid(pid2, NULL, 0);
+  waitpid(pid2, NULL, 0);
+  remove("temp.txt");
+  printf("removed");
 }
 
 void execComm(char* cmd){
