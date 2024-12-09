@@ -9,14 +9,14 @@
 #include <string.h>
 #include "shellFunc.h"
 
-// cd's to the path indicated by the parameter; works based on curr directory, not absolute path
+// cd's to the path indicated by the parameter; works based on curr directory, not absolute path.
 void cd(char* path){
   if(chdir(path) != 0){
     perror("cd not working");
   }
 }
 
-// reads standard input, up to 256 characters. Frees and returns null if end-of-file character is present
+// reads standard input, up to 256 characters. Frees and returns null if end-of-file character is present. It returns the line given by the user. 
 char* readstdin(){
   char* line = malloc(256);
   

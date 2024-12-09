@@ -5,6 +5,10 @@
 
 **Team name:** InterSTELLAr WASPs
 
+**Features:** 
+
+Our shell implements all the required features, as well as shortening the path prompt and coloring it. 
+
 **Reportable bugs:**
 + When using **echo** with quotation marks, the quotation marks are kept in the output. So, 
 > echo abc hey mr k
@@ -14,3 +18,14 @@ will produce abc hey mr k, and
 > echo "abc hey mr k"
 
 will produce "abc hey mr k"
+
+**Function headers:** 
+
+> void displayPath();
+> char* readstdin();
+> void cd(char* path);
+> void execPipes(char* cmd);
+> void execComm(char* cmd);
+> void parse_args( char * line, char ** arg_ary );
+> void redirect(int fd1, int fd2);
+> int main()
