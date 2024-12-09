@@ -58,11 +58,49 @@ void redirect(int fd1, int fd2) {
     close(backup);
 }
 
+void execPipes(char** cmds){
+  char* args1[256]; char* args2[256];
+  parse_args(cmds[0], args1);
+  parse_args(cmds[1], args2);
+
+  int pipeArr[2];
+  pid_t pid1 = fork();
+  if(pid1 == 0){
+    dup2(pipeArr[1], STDOUT_FILENO);
+    close(pipeArr[0]);
+    execvp(args1[0], args1);
+    perror("execvp not workingggggggg\n");
+    exit(1);
+  }
+
+  pid_t pid2 = fork();
+  if(pid2 == 0){
+    dup2(pipeArr[0], STDIN_FILENO);
+    close(pipeArr[1]);
+    execvp(args2[0], args2);
+    perror("execvp not workinggggg\n");
+    exit(1);
+  }
+
+  close(pipeArr[1]); close(pipeArr[0]);
+  wait(NULL); wait(NULL);
+}
+
 void execComm(char* cmd){
   char* args[256];
+  char* pipeArgs[2];
+  int pipeFile[2];
   char cmdCop[256];
   strcpy(cmdCop, cmd);
   char* cmdCopy = cmdCop;
+  char* cmdCopy2 = cmdCop;
+
+  if(strchr(cmd, '|')){
+    pipeArgs[0] = strsep(&cmdCopy2, "|");
+    pipeArgs[1] = strsep(NULL, "|");
+    execPipes(pipeArgs);
+    return;
+  }
 
   parse_args(cmdCopy, args);
 
