@@ -2,4 +2,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 int main();
+void displayPath();
+char* readstdin();
+void cd(char* path);
+void execComm(char* cmd);
 #endif
