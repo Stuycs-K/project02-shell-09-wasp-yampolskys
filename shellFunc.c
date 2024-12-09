@@ -60,7 +60,12 @@ void redirect(int fd1, int fd2) {
 
 void execComm(char* cmd){
   char* args[256];
-  parse_args(cmd, args);
+  char cmdCop[256];
+  strcpy(cmdCop, cmd);
+  char* cmdCopy = cmdCop;
+  printf("command: %s\n", cmd);
+
+  parse_args(cmdCopy, args);
 
   if(strcmp(args[0], "cd") == 0){
     if(args[1] != NULL){
@@ -76,10 +81,14 @@ void execComm(char* cmd){
     exit(0);
   }
 
+  printf("command: %s\n", cmdCopy);
   char* redirectIn = strchr(cmd, '<');
   char* redirectOut = strchr(cmd, '>');
   int fdIn = -1;
   int fdOut = -1;
+
+  printf("redirect in: %s\n", redirectIn);
+  printf("redirect out: %s\n", redirectOut);
 
   if(redirectIn != NULL || redirectOut != NULL){
     char* file = NULL;
@@ -101,7 +110,7 @@ void execComm(char* cmd){
       while(*file == ' '){
         file++;
       }
-      fdOut = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+      fdOut = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
       if(fdOut == -1){
         perror("redirect output file problem");
         exit(1);
@@ -109,6 +118,9 @@ void execComm(char* cmd){
     }
 
   }
+
+  printf("fdin: %d\n", fdIn);
+  printf("fdout: %d\n", fdOut);
 
   int i = 0;
   while(args[i] != NULL){
@@ -120,6 +132,8 @@ void execComm(char* cmd){
   
   pid_t child = fork();
   if(child == 0){
+    printf("fdin: %d\n", fdIn);
+    printf("fdout: %d\n", fdOut);
 
     if(fdIn != -1){
       redirect(fdIn, STDIN_FILENO);

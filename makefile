@@ -8,3 +8,4 @@ main.o: main.c shellFunc.h
 clean:
 	rm -f *.o
 	rm -f shell
+	rm -f *.txt
