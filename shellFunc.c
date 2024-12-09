@@ -9,7 +9,6 @@
 #include <string.h>
 #include "shellFunc.h"
 
-
 // cd's to the path indicated by the parameter; works based on curr directory, not absolute path
 void cd(char* path){
   if(chdir(path) != 0){
@@ -65,7 +64,7 @@ void redirect(int fd1, int fd2) {
     close(backup);
 }
 
-// 
+// checks for the positioning of the pipe in the string and separates the commands by either side. Creates temporarily files for input/output. 
 void execPipes(char* cmd){
   char* args[256];
   char* pipeCmd[256];
@@ -133,7 +132,7 @@ void execPipes(char* cmd){
   remove("temp.txt");
 }
 
-// executes arguments one by one. Takes in a string of all the arguments (separated by ;), and first checks for pipes. Regardless of whether pipes are found, checks for > and < operators. Then, executes commands normally if none are found. 
+// executes arguments one by one. Takes in a string of all the arguments (separated by ;), and first checks for pipes, then calls execPipes if there are any. Regardless of whether pipes are found, checks for > and < operators. Then, executes commands normally if none are found. 
 void execComm(char* cmd){
   char* args[256];
   char cmdCop[256];
