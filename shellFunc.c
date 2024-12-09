@@ -125,7 +125,6 @@ void execPipes(char* cmd){
   }
   waitpid(pid2, NULL, 0);
   remove("temp.txt");
-  printf("removed");
 }
 
 void execComm(char* cmd){
