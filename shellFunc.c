@@ -77,7 +77,7 @@ void execComm(char* cmd){
   }
 
   char* redirectIn = strchr(cmd, '<');
-  char* redirectOut = strchr(cmd, '<');
+  char* redirectOut = strchr(cmd, '>');
   int fdIn = -1;
   int fdOut = -1;
 
