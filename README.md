@@ -7,10 +7,10 @@
 
 **Reportable bugs:**
 + When using **echo** with quotation marks, the quotation marks are kept in the output. So, 
-> echo abc
+> echo abc hey mr k
 
-will produce abc, and 
+will produce abc hey mr k, and 
 
-> echo "abc"
+> echo "abc hey mr k"
 
-will produce "abc"
+will produce "abc hey mr k"
